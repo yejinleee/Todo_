@@ -1,0 +1,68 @@
+body {
+  padding-left: 10px;
+}
+
+form {
+  border-bottom: 1px solid #dadce0;
+  width: 250px;
+  display: flex;
+}
+
+form input {
+  border: 0;
+  outline: 0;
+  width: 200px;
+  padding: .5rem;
+}
+
+form button, .list_div button {
+  cursor: pointer;
+  background-color: #0000;
+  border: none;
+  border-radius: 50px;
+  width: 35px;
+  height: 35px;
+  margin-left: 5px;
+}
+
+form button:hover {
+  box-shadow: inset 1px 1px 3px 1px #dadce0;
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+.list_div {
+  align-items: center;
+  margin-bottom: 5px;
+  display: flex;
+}
+
+.list_div li {
+  word-break: break-all;
+  white-space: normal;
+  cursor: pointer;
+  border-radius: 8px;
+  align-items: center;
+  width: 200px;
+  padding: 3px 3px 3px 12px;
+  display: flex;
+  box-shadow: 1px 1px 3px 1px #dadce0;
+}
+
+.list_div li:hover {
+  background-color: #dadce0;
+}
+
+.list_div button:hover {
+  box-shadow: inset 1px 1px 3px 1px #dadce0;
+}
+
+.done {
+  color: #757575;
+  text-decoration: line-through;
+}
+
+/*# sourceMappingURL=index.61d3354a.css.map */
