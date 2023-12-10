@@ -578,15 +578,15 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _appJs = require("./App.js");
 var _appJsDefault = parcelHelpers.interopDefault(_appJs);
-var _storage = require("./storage");
-const initialState = (0, _storage.storageGetItem)("todos", "");
+var _storageJs = require("../utils/storage.js");
+const initialState = (0, _storageJs.storageGetItem)("todos", "");
 const $app = document.querySelector(".app");
 (0, _appJsDefault.default)({
     $target: $app,
     initialState
 });
 
-},{"./App.js":"lyqAI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./storage":"hNVue"}],"lyqAI":[function(require,module,exports) {
+},{"./App.js":"lyqAI","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../utils/storage.js":"dcS4W"}],"lyqAI":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>App);
@@ -598,7 +598,7 @@ var _todoCount = require("./TodoCount");
 var _todoCountDefault = parcelHelpers.interopDefault(_todoCount);
 var _todoHeader = require("./TodoHeader");
 var _todoHeaderDefault = parcelHelpers.interopDefault(_todoHeader);
-var _storage = require("./storage");
+var _storage = require("../utils/storage");
 const storageTodos = (0, _storage.storageGetItem)("todos", "");
 let IDX = storageTodos && storageTodos.length > 0 ? (0, _storage.storageGetItem)("todos", "")[storageTodos.length - 1].idx + 1 : 0;
 function App({ $target, initialState }) {
@@ -612,7 +612,7 @@ function App({ $target, initialState }) {
     /// TodoHeader, TodoForm 은 여러번 호출되지 않고 그렇기 때문에 매번 새로운 인스턴스를 생성하지 않아도 되기 때문에, new 생성자를 사용하지 않고 호출하였다.
     (0, _todoHeaderDefault.default)({
         $target,
-        text: "TS Todo List"
+        text: "Todo List w/TS"
     });
     (0, _todoFormDefault.default)({
         $target,
@@ -634,14 +634,13 @@ function App({ $target, initialState }) {
         initialState,
         handleComplete: (idx)=>{
             const todos = (0, _storage.storageGetItem)("todos", "");
-            console.log(todos);
             todos.forEach((todo)=>{
                 if (todo.idx === idx) todo.isCompleted = !todo.isCompleted;
             });
             assignNewState(todos);
         },
         handleDelete: (idx)=>{
-            const lastTodos = (0, _storage.storageGetItem)("todos", "").filter((e)=>e.idx !== idx);
+            const lastTodos = (0, _storage.storageGetItem)("todos", "").filter((todo)=>todo.idx !== idx);
             assignNewState(lastTodos);
         }
     });
@@ -651,7 +650,7 @@ function App({ $target, initialState }) {
     });
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./storage":"hNVue","./TodoHeader":"iCE78","./TodoForm":"jcANC","./TodoCount":"gXZII","./TodoList":"lxFEv"}],"gkKU3":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./TodoHeader":"iCE78","./TodoForm":"jcANC","./TodoCount":"gXZII","./TodoList":"lxFEv","../utils/storage":"dcS4W"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -681,40 +680,17 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"hNVue":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "storageSetItem", ()=>storageSetItem);
-parcelHelpers.export(exports, "storageGetItem", ()=>storageGetItem);
-const storageSetItem = (key, value)=>{
-    try {
-        window.localStorage.setItem(key, value);
-    } catch (e) {
-        console.log(e);
-    }
-};
-const storageGetItem = (key, defaultValue)=>{
-    try {
-        const storedValue = window.localStorage.getItem(key);
-        if (storedValue) return JSON.parse(storedValue);
-        return defaultValue;
-    } catch (e) {
-        console.log(e);
-        return defaultValue;
-    }
-};
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iCE78":[function(require,module,exports) {
+},{}],"iCE78":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>TodoHeader);
 function TodoHeader({ $target, text }) {
     const $header = document.createElement("h1");
-    $target.appendChild($header);
-    this.render = ()=>{
+    $target && $target.appendChild($header);
+    const render = ()=>{
         $header.textContent = text;
     };
-    this.render();
+    render();
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jcANC":[function(require,module,exports) {
@@ -723,9 +699,9 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>TodoForm);
 function TodoForm({ $target, onSubmit }) {
     const $form = document.createElement("form");
-    $target.appendChild($form);
+    $target && $target.appendChild($form);
     let isInit = false;
-    this.render = ()=>{
+    const render = ()=>{
         $form.innerHTML = `
       <input type = "text" name = "todo"/>
       <button>\u{2795}</button>`;
@@ -740,7 +716,7 @@ function TodoForm({ $target, onSubmit }) {
         });
         isInit = !isInit;
     };
-    this.render();
+    render();
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gXZII":[function(require,module,exports) {
@@ -768,17 +744,10 @@ function TodoCount({ $target, initialState }) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>TodoList);
+var _createElement = require("../utils/createElement");
 function TodoList({ $target, initialState, handleComplete, handleDelete }) {
     const $listWrap = document.createElement("ul");
     $target && $target.appendChild($listWrap);
-    const createTodoElement = ({ $target, element, idx, text })=>{
-        const $element = document.createElement(element);
-        ////// :HTMLElement 를 주면 Type 'number' is not assignable to type 'string'.ts(2322)
-        $element.dataset.idx = idx;
-        $element.innerHTML = text;
-        $target && $target.appendChild($element);
-        return $element;
-    };
     let state = initialState;
     let isInit = false;
     const setState = (nextState)=>{
@@ -789,7 +758,7 @@ function TodoList({ $target, initialState, handleComplete, handleDelete }) {
             const todoDiv = document.createElement("div");
             todoDiv.className = "list_div";
             // prettier-ignore
-            const todoLi = createTodoElement({
+            const todoLi = (0, _createElement.createTodoElement)({
                 $target: todoDiv,
                 element: "li",
                 idx,
@@ -801,7 +770,7 @@ function TodoList({ $target, initialState, handleComplete, handleDelete }) {
                 handleComplete(parseInt(idx));
             });
             // prettier-ignore
-            const newTodoBtn = createTodoElement({
+            const newTodoBtn = (0, _createElement.createTodoElement)({
                 $target: todoDiv,
                 element: "button",
                 idx,
@@ -823,6 +792,42 @@ function TodoList({ $target, initialState, handleComplete, handleDelete }) {
         setState
     };
 }
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../utils/createElement":"6jLqe"}],"6jLqe":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "createTodoElement", ()=>createTodoElement);
+const createTodoElement = ({ $target, element, idx, text })=>{
+    const $element = document.createElement(element);
+    ////// :HTMLElement 를 주면 Type 'number' is not assignable to type 'string'.ts(2322)
+    $element.dataset.idx = idx;
+    $element.innerHTML = text;
+    $target && $target.appendChild($element);
+    return $element;
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dcS4W":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "storageSetItem", ()=>storageSetItem);
+parcelHelpers.export(exports, "storageGetItem", ()=>storageGetItem);
+const storageSetItem = (key, value)=>{
+    try {
+        window.localStorage.setItem(key, value);
+    } catch (e) {
+        console.error(e);
+    }
+};
+const storageGetItem = (key, defaultValue)=>{
+    try {
+        const storedValue = window.localStorage.getItem(key);
+        if (storedValue) return JSON.parse(storedValue);
+        return defaultValue;
+    } catch (e) {
+        console.error(e);
+        return defaultValue;
+    }
+};
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["d8lhj","jeorp"], "jeorp", "parcelRequire810e")
 

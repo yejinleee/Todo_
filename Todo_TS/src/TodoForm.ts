@@ -1,10 +1,12 @@
-export default function TodoForm(this: any, { $target, onSubmit }: any) {
+import { ITodoForm } from '../types/todoTypes';
+
+export default function TodoForm({ $target, onSubmit }: ITodoForm) {
   const $form = document.createElement('form');
-  $target.appendChild($form);
+  $target && $target.appendChild($form);
 
   let isInit = false;
 
-  this.render = () => {
+  const render = () => {
     $form.innerHTML = `
       <input type = "text" name = "todo"/>
       <button>➕</button>`;
@@ -25,5 +27,5 @@ export default function TodoForm(this: any, { $target, onSubmit }: any) {
     }
     isInit = !isInit;
   };
-  this.render();
+  render();
 }

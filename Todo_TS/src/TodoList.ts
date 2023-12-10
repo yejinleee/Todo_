@@ -1,4 +1,5 @@
 import { ITodoList, ITodo, ICreateTodo } from '../types/todoTypes';
+import { createTodoElement } from '../utils/createElement';
 
 export default function TodoList({
   $target,
@@ -9,20 +10,10 @@ export default function TodoList({
   const $listWrap = document.createElement('ul');
   $target && $target.appendChild($listWrap);
 
-  const createTodoElement = ({ $target, element, idx, text }: ICreateTodo) => {
-    const $element: any = document.createElement(element);
-    ////// :HTMLElement 를 주면 Type 'number' is not assignable to type 'string'.ts(2322)
-    $element.dataset.idx = idx;
-    $element.innerHTML = text;
-    $target && $target.appendChild($element);
-
-    return $element;
-  };
-
-  let state = initialState;
+  let state: ITodo[] = initialState;
   let isInit = false;
 
-  const setState = (nextState: any) => {
+  const setState = (nextState: ITodo[]) => {
     // console.log('TodoList에서 nextState', nextState);
     state = nextState;
 

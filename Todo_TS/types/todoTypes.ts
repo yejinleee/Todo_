@@ -2,7 +2,14 @@ export interface IApp {
   $target: HTMLElement | null;
   initialState: [];
 }
-
+export interface ITodoHeader {
+  $target: HTMLElement | null;
+  text: string;
+}
+export interface ITodoForm {
+  $target: HTMLElement | null;
+  onSubmit: (text: string) => void;
+}
 export interface ITodoCount {
   $target: HTMLElement | null;
   initialState: [];
@@ -11,15 +18,8 @@ export interface ITodoCount {
 export interface ITodoList {
   $target: HTMLElement | null;
   initialState: [];
-  handleComplete: (idx: any) => void;
-  handleDelete: (idx: any) => void;
-}
-
-export interface ITodoEach {
-  $target: HTMLElement | null;
-  initialState: [];
-  handleComplete: (idx: any) => void;
-  handleDelete: (idx: any) => void;
+  handleComplete: (idx: number) => void;
+  handleDelete: (idx: number) => void;
 }
 
 export interface ITodo {
@@ -30,7 +30,7 @@ export interface ITodo {
 
 export interface ICreateTodo {
   $target: HTMLElement | null;
-  element: string; //태근디... "li"이런
+  element: 'li' | 'button';
   idx: number;
   text: string;
 }

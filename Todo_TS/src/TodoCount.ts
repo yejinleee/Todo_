@@ -1,14 +1,14 @@
-import { ITodoCount } from '../types/todoTypes';
+import { ITodoCount, ITodo } from '../types/todoTypes';
 
 export default function TodoCount({ $target, initialState }: ITodoCount) {
   const $count = document.createElement('div');
   $target && $target.appendChild($count);
 
-  const render = (newState: any) => {
+  const render = (newState: ITodo[]) => {
     if (newState) {
       const lenAll = newState.length;
       const lenCompleted = newState.filter(
-        (todo: any) => todo.isCompleted,
+        (todo: ITodo) => todo.isCompleted,
       ).length;
 
       $count.innerHTML = lenAll

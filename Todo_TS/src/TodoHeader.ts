@@ -1,10 +1,12 @@
-export default function TodoHeader(this: any, { $target, text }: any) {
+import { ITodoHeader } from '../types/todoTypes';
+
+export default function TodoHeader({ $target, text }: ITodoHeader) {
   const $header = document.createElement('h1');
 
-  $target.appendChild($header);
+  $target && $target.appendChild($header);
 
-  this.render = () => {
+  const render = () => {
     $header.textContent = text;
   };
-  this.render();
+  render();
 }
