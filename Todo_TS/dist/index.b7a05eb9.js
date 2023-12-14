@@ -579,7 +579,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _appJs = require("./App.js");
 var _appJsDefault = parcelHelpers.interopDefault(_appJs);
 var _storageJs = require("../utils/storage.js");
-const initialState = (0, _storageJs.storageGetItem)("todos", "");
+const initialState = (0, _storageJs.storageGetItem)("todos", []);
 const $app = document.querySelector(".app");
 (0, _appJsDefault.default)({
     $target: $app,
@@ -599,11 +599,10 @@ var _todoCountDefault = parcelHelpers.interopDefault(_todoCount);
 var _todoHeader = require("./TodoHeader");
 var _todoHeaderDefault = parcelHelpers.interopDefault(_todoHeader);
 var _storage = require("../utils/storage");
-const storageTodos = (0, _storage.storageGetItem)("todos", "");
-let IDX = storageTodos && storageTodos.length > 0 ? (0, _storage.storageGetItem)("todos", "")[storageTodos.length - 1].idx + 1 : 0;
+const storageTodos = (0, _storage.storageGetItem)("todos", []);
+let IDX = storageTodos && storageTodos.length > 0 ? (0, _storage.storageGetItem)("todos", [])[storageTodos.length - 1].idx + 1 : 0;
 function App({ $target, initialState }) {
     const assignNewState = (nextTodos)=>{
-        /// 구 handleValidated
         (0, _storage.storageSetItem)("todos", JSON.stringify(nextTodos));
         todoList.setState(nextTodos);
         todoList.state = nextTodos; //// todoList.setState에 state=nextState 할당 있는데 왜 또해야할까
@@ -633,14 +632,14 @@ function App({ $target, initialState }) {
         $target,
         initialState,
         handleComplete: (idx)=>{
-            const todos = (0, _storage.storageGetItem)("todos", "");
+            const todos = (0, _storage.storageGetItem)("todos", []);
             todos.forEach((todo)=>{
                 if (todo.idx === idx) todo.isCompleted = !todo.isCompleted;
             });
             assignNewState(todos);
         },
         handleDelete: (idx)=>{
-            const lastTodos = (0, _storage.storageGetItem)("todos", "").filter((todo)=>todo.idx !== idx);
+            const lastTodos = (0, _storage.storageGetItem)("todos", []).filter((todo)=>todo.idx !== idx);
             assignNewState(lastTodos);
         }
     });
@@ -708,9 +707,9 @@ function TodoForm({ $target, onSubmit }) {
         if (!isInit) $form.addEventListener("submit", (e)=>{
             e.preventDefault();
             const $input = $form.querySelector("input[name=todo]");
-            const text = $input.value;
+            const text = $input ? $input.value : "";
             if (text.length > 1) {
-                $input.value = "";
+                if ($input) $input.value = "";
                 onSubmit(text);
             }
         });
@@ -766,8 +765,10 @@ function TodoList({ $target, initialState, handleComplete, handleDelete }) {
             });
             if (isCompleted) todoLi.className = "done";
             todoLi.addEventListener("click", (e)=>{
+                // 이벤트에 대한 타입은 MouseEvent가 맞나요?
+                // 이후에 e.target 등으로 접근하기 위해 항상 as HTMLLiElement 처럼 단언하는 방법밖에 없을까요..?
                 const idx = e.target.dataset.idx;
-                handleComplete(parseInt(idx));
+                if (idx) handleComplete(parseInt(idx));
             });
             // prettier-ignore
             const newTodoBtn = (0, _createElement.createTodoElement)({
@@ -778,13 +779,11 @@ function TodoList({ $target, initialState, handleComplete, handleDelete }) {
             });
             newTodoBtn.addEventListener("click", (e)=>{
                 const idx = e.target.dataset.idx;
-                handleDelete(parseInt(idx));
+                if (idx) handleDelete(parseInt(idx));
             });
             $listWrap && $listWrap.appendChild(todoDiv);
         });
-        // $target && $target.appendChild($listWrap);
         $listWrap && $listWrap.before($listWrap);
-    // console.log(state);
     };
     setState(initialState);
     return {
@@ -818,7 +817,7 @@ const storageSetItem = (key, value)=>{
         console.error(e);
     }
 };
-const storageGetItem = (key, defaultValue)=>{
+const storageGetItem = (key, defaultValue = [])=>{
     try {
         const storedValue = window.localStorage.getItem(key);
         if (storedValue) return JSON.parse(storedValue);
