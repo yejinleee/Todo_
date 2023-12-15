@@ -1,6 +1,9 @@
 import { ITodoForm } from '../types/todoTypes';
 
-export default function TodoForm({ $target, onSubmit }: ITodoForm) {
+export default function TodoForm({
+  $target,
+  onSubmit,
+}: ITodoForm<HTMLElement | null>) {
   const $form = document.createElement('form');
   $target && $target.appendChild($form);
 

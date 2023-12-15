@@ -6,7 +6,7 @@ export default function TodoList({
   initialState,
   handleComplete,
   handleDelete,
-}: ITodoList) {
+}: ITodoList<HTMLElement | null>) {
   const $listWrap = document.createElement('ul');
   $target && $target.appendChild($listWrap);
 

@@ -1,22 +1,20 @@
-export interface IApp {
-  $target: HTMLElement | null;
+interface ITodoBase<T> {
+  $target: T;
+}
+export interface IApp<T> extends ITodoBase<T> {
   initialState: ITodo[];
 }
-export interface ITodoHeader {
-  $target: HTMLElement | null;
+export interface ITodoHeader<T> extends ITodoBase<T> {
   text: string;
 }
-export interface ITodoForm {
-  $target: HTMLElement | null;
+export interface ITodoForm<T> extends ITodoBase<T> {
   onSubmit: (text: string) => void;
 }
-export interface ITodoCount {
-  $target: HTMLElement | null;
+export interface ITodoCount<T> extends ITodoBase<T> {
   initialState: ITodo[];
 }
 
-export interface ITodoList {
-  $target: HTMLElement | null;
+export interface ITodoList<T> extends ITodoBase<T> {
   initialState: ITodo[];
   handleComplete: (idx: number) => void;
   handleDelete: (idx: number) => void;

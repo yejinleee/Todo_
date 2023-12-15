@@ -1,6 +1,9 @@
 import { ITodoCount, ITodo } from '../types/todoTypes';
 
-export default function TodoCount({ $target, initialState }: ITodoCount) {
+export default function TodoCount({
+  $target,
+  initialState,
+}: ITodoCount<HTMLElement | null>) {
   const $count = document.createElement('div');
   $target && $target.appendChild($count);
 

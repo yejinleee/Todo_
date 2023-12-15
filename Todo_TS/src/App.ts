@@ -11,7 +11,10 @@ let IDX: number =
     ? storageGetItem('todos', [])[storageTodos.length - 1].idx + 1
     : 0;
 
-export default function App({ $target, initialState }: IApp) {
+export default function App({
+  $target,
+  initialState,
+}: IApp<HTMLElement | null>) {
   const assignNewState = (nextTodos: ITodo[]) => {
     storageSetItem('todos', JSON.stringify(nextTodos));
     todoList.setState(nextTodos);

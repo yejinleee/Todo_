@@ -1,6 +1,9 @@
 import { ITodoHeader } from '../types/todoTypes';
 
-export default function TodoHeader({ $target, text }: ITodoHeader) {
+export default function TodoHeader({
+  $target,
+  text,
+}: ITodoHeader<HTMLElement | null>) {
   const $header = document.createElement('h1');
 
   $target && $target.appendChild($header);
